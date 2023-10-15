@@ -1,4 +1,4 @@
-CREATE TABLE app.user
+CREATE TABLE IF NOT EXISTS app.user
 (
     id          CHAR(36) NOT NULL PRIMARY KEY,
     first_name  VARCHAR(100),

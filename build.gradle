@@ -23,8 +23,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'com.mysql:mysql-connector-j:8.0.33'
-    implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-    implementation 'io.springfox:springfox-swagger2:3.0.0'
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.2.0'
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -37,4 +36,22 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+//https://stackoverflow.com/a/54117966
+allprojects { project ->
+    project.plugins.withId('java') {
+        test {
+            maxHeapSize = "1536M"
+            // If you don't want to use spring.properties (or add other JVM args)
+            jvmArgs "-Dspring.test.context.cache.maxSize=1"
+        }
+    }
+    project.plugins.withId('java-library') {
+        test {
+            maxHeapSize = "1536M"
+            // If you don't want to use spring.properties (or add other JVM args)
+            jvmArgs "-Dspring.test.context.cache.maxSize=1"
+        }
+    }
 }
