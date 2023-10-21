@@ -9,6 +9,7 @@ import landau.leo.high.dto.GetUserResponse;
 import landau.leo.high.dto.LoginUserRequest;
 import landau.leo.high.dto.RegisterUserRequest;
 import landau.leo.high.entity.UserEntity;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +25,10 @@ import org.testcontainers.utility.DockerImageName;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
+@Disabled //comment when using docker
 @Testcontainers
 @SpringBootTest
 class UserServiceTest {

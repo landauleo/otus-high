@@ -1,9 +1,12 @@
 package landau.leo.high.service;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import landau.leo.high.dao.UserDao;
 import landau.leo.high.dto.GetUserResponse;
+import landau.leo.high.dto.GetUserShortInfoResponse;
 import landau.leo.high.dto.LoginUserRequest;
 import landau.leo.high.dto.RegisterUserRequest;
 import landau.leo.high.entity.UserEntity;
@@ -48,6 +51,18 @@ public class UserService {
 
     public GetUserResponse getUserById(String userId) {
         return GetUserResponse.toDto(userDao.getById(userId));
+    }
+
+    public List<GetUserShortInfoResponse> getUserByFirstAndSecondName(String firstName, String secondName) {
+        return userDao.getByFirstAndSecondName(firstName, secondName).stream().map(GetUserShortInfoResponse::toDto).collect(Collectors.toList());
+    }
+
+    public Integer countUsers() {
+        return userDao.getUsersNumber();
+    }
+
+    public void loadDefaultUsers() {
+        userDao.loadDefaultUsers();
     }
 
 }
