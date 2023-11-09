@@ -13,7 +13,7 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .info(new Info().title("SpringShop API")
+                .info(new Info().title("App API")
                         .description("Otus highload architect homework")
                         .contact(new Contact().url("https://otus.ru/lessons/highloadarchitect/")))
                 .externalDocs(new ExternalDocumentation()

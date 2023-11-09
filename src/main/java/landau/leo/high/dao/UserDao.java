@@ -37,14 +37,14 @@ public class UserDao {
     private final NamedParameterJdbcOperations jdbcTemplate;
     private final DataSource dataSource;
 
-    private final static String INSERT_USER = "INSERT INTO user (id, first_name, second_name, birthdate, biography, city, password, gender) " +
+    private static final String INSERT_USER = "INSERT INTO user (id, first_name, second_name, birthdate, biography, city, password, gender) " +
             "VALUES (:id, :firstName, :secondName, :birthdate, :biography, :city, :password, :gender)";
 
-    private final static String GET_USER_BY_ID = "SELECT id, first_name, second_name, birthdate, biography, city, password, gender FROM user WHERE id = :id";
+    private static final String GET_USER_BY_ID = "SELECT id, first_name, second_name, birthdate, biography, city, password, gender FROM user WHERE id = :id";
 
-    private final static String COUNT_USERS = "SELECT COUNT(id) FROM user;";
+    private static final String COUNT_USERS = "SELECT COUNT(id) FROM user;";
 
-    private final static String GET_USER_BY_FIRST_AND_SECOND_NAME = "SELECT id, first_name, second_name, birthdate, biography, city, password, gender FROM user" +
+    private static final String GET_USER_BY_FIRST_AND_SECOND_NAME = "SELECT id, first_name, second_name, birthdate, biography, city, password, gender FROM user" +
             " WHERE first_name LIKE :firstName AND second_name LIKE :secondName;";
 
     public void insert(UserEntity user) {
@@ -61,7 +61,7 @@ public class UserDao {
         jdbcTemplate.update(INSERT_USER, values);
     }
 
-    public UserEntity getById(String id) {
+    public UserEntity getUserById(String id) {
         Map<String, String> values = Map.of("id", id);
         try {
             return jdbcTemplate.queryForObject(GET_USER_BY_ID, values, new UserMapper());
@@ -190,5 +190,4 @@ public class UserDao {
         }
 
     }
-
 }
