@@ -37,7 +37,6 @@ public class PostDao {
     private static final String GET_FRIENDS_POSTS = "SELECT id, post_text, user_id FROM post LIMIT :limit OFFSET :offset";
 
     public List<PostEntity> getFriendsPosts(int offset, long limit) {
-        log.info("AAAAAAAAAAAAA");
         try {
             List<PostEntity> friendsPosts = new ArrayList<>();
             List<Map<String, Object>> list = jdbcTemplate.queryForList(GET_FRIENDS_POSTS, Map.of("offset", offset, "limit", limit));
