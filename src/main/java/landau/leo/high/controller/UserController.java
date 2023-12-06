@@ -7,9 +7,12 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import landau.leo.high.dto.GetUserResponse;
 import landau.leo.high.dto.GetUserShortInfoResponse;
 import landau.leo.high.dto.LoginUserRequest;
+import landau.leo.high.dto.PostResponse;
 import landau.leo.high.dto.RegisterUserRequest;
 import landau.leo.high.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -94,12 +97,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserByFirstAndSecondName(firstName, secondName));
     }
 
-    @PostMapping("/load")
+    @PostMapping("/user/load")
     @Operation(summary = "Load default users")
     public void loadUsers() {
         userService.loadDefaultUsers();
     }
-
 
     @PostMapping("/count")
     @Operation(summary = "Count users")
@@ -107,5 +109,24 @@ public class UserController {
         return userService.countUsers();
     }
 
+    @GetMapping("/post/feed")
+    @Operation(summary = "Users post", description = "Get users posts")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved user posts"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
+    public ResponseEntity<List<PostResponse>> getFriendsPosts(
+            @Parameter(name = "offset", example = "0") @RequestParam @Min(0) @Max(100) int offset,
+            @Parameter(name = "limit", example = "10") @Min(1) @RequestParam long limit) {
+        return ResponseEntity.ok(userService.getUsersPosts(offset, limit));
+    }
+
+    @PostMapping("/post/load")
+    @Operation(summary = "Load default posts")
+    public void loadPosts() {
+        userService.loadDefaultPosts();
+    }
 
 }
