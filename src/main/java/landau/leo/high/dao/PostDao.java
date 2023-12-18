@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -21,7 +19,6 @@ import landau.leo.high.entity.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
@@ -97,19 +94,6 @@ public class PostDao {
 
         LocalDateTime parseEnd = LocalDateTime.now();
         log.info("Duration of insert default posts: {} seconds", Duration.between(parseStart, parseEnd).getSeconds());
-    }
-
-    private static class PostMapper implements RowMapper<PostEntity> {
-
-        @Override
-        public PostEntity mapRow(ResultSet rs, int i) throws SQLException {
-            return new PostEntity(
-                    UUID.fromString(rs.getString("id")),
-                    UUID.fromString(rs.getString("user_id")),
-                    rs.getString("post_text")
-            );
-        }
-
     }
 
 }

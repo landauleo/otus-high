@@ -4,13 +4,16 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import landau.leo.high.dao.DialogMessageDao;
 import landau.leo.high.dao.PostDao;
 import landau.leo.high.dao.UserDao;
+import landau.leo.high.dto.DialogMessage;
 import landau.leo.high.dto.GetUserResponse;
 import landau.leo.high.dto.GetUserShortInfoResponse;
 import landau.leo.high.dto.LoginUserRequest;
 import landau.leo.high.dto.PostResponse;
 import landau.leo.high.dto.RegisterUserRequest;
+import landau.leo.high.entity.DialogMessageEntity;
 import landau.leo.high.entity.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -24,6 +27,7 @@ public class UserService {
 
     private final UserDao userDao;
     private final PostDao postDao;
+    private final DialogMessageDao dialogMessageDao;
 
     public String authenticateUser(LoginUserRequest dto) {
 
@@ -76,6 +80,14 @@ public class UserService {
     @Cacheable("usersPosts")
     public List<PostResponse> getUsersPosts(int offset, long limit) {
         return postDao.getFriendsPosts(offset, limit).stream().map(PostResponse::toDto).collect(Collectors.toList());
+    }
+
+    public List<DialogMessage> getUsersDialogs(String userId) {
+        return dialogMessageDao.getMessages(userId).stream().map(DialogMessage::toDto).collect(Collectors.toList());
+    }
+
+    public void send(UUID fromUserId, UUID toUserId, String text) {
+        dialogMessageDao.insert(new DialogMessageEntity(fromUserId, toUserId, text));
     }
 
 }

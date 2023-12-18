@@ -1,6 +1,7 @@
 package landau.leo.high.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -9,6 +10,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import landau.leo.high.dto.DialogMessage;
+import landau.leo.high.dto.DialogMessageRequest;
 import landau.leo.high.dto.GetUserResponse;
 import landau.leo.high.dto.GetUserShortInfoResponse;
 import landau.leo.high.dto.LoginUserRequest;
@@ -127,6 +130,40 @@ public class UserController {
     @Operation(summary = "Load default posts")
     public void loadPosts() {
         userService.loadDefaultPosts();
+    }
+
+    @GetMapping("/dialog/{user_id}/list")
+    @Operation(summary = "Get user dialogs", description = "Get user dialogs by user ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved user dialogs"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
+    public ResponseEntity<List<DialogMessage>> getUsersDialogs(
+            @Parameter(name = "User ID", required = true)
+            @PathVariable("user_id") String userId) {
+
+        List<DialogMessage> list = userService.getUsersDialogs(userId);
+        return ResponseEntity.ok(list);
+    }
+
+    @PostMapping("/dialog/{user_id}/send")
+    @Operation(summary = "Send user message", description = "Send user message")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved user dialogs"),
+            @ApiResponse(responseCode = "400", description = "Invalid request"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error"),
+            @ApiResponse(responseCode = "503", description = "Service unavailable")
+    })
+    public void sendUserMessage(
+            @Parameter(name = "User ID", required = true)
+            @PathVariable("user_id") UUID userId,
+            @RequestBody DialogMessageRequest messageRequest) {
+
+        userService.send(userId, messageRequest.getTo(), messageRequest.getText());
     }
 
 }
