@@ -8,20 +8,30 @@ CREATE TABLE IF NOT EXISTS app.user
     city        varchar(100),
     password    varchar(250),
     gender      varchar(6)
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS app.post
 (
     id        char(36) NOT NULL PRIMARY KEY,
-    post_text text,
+    post_text longtext,
     user_id   char(36) NOT NULL
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS app.dialog_message
 (
-    from_user_id char(36) NOT NULL,
-    to_user_id   text,
+    from_user_id char(36) NOT NULL REFERENCES app.user (id) KEY,
+    to_user_id   longtext,
     text_message char(36) NOT NULL,
     -- Добавляем поле для хранения хэша, используемого для шардирования
     shard_id     int
-);
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4
+  COLLATE = utf8mb4_unicode_ci;
+
+-- Создаем таблицу распределения с указанием столбца для хэширования (from_id)
+SELECT create_distributed_table('dialog_message_entity', 'from_id');
+
