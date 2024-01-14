@@ -3,6 +3,7 @@ package landau.leo.high.dao;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.time.Duration;
@@ -33,6 +34,8 @@ public class PostDao {
     //открытием стало то, что сначала всегда идет лимит и только потом оффсет, иначе запрос крашится
     private static final String GET_FRIENDS_POSTS = "SELECT id, post_text, user_id FROM post LIMIT :limit OFFSET :offset";
 
+    private static final String INSERT_POST = "INSERT INTO post (id, post_text, user_id) VALUES (:id, :postText, :userId)";
+
     public List<PostEntity> getFriendsPosts(int offset, long limit) {
         try {
             List<PostEntity> friendsPosts = new ArrayList<>();
@@ -47,6 +50,15 @@ public class PostDao {
             log.error("Failed to get friends posts", ex);
             throw new RuntimeException("Failed to get friends posts", ex);
         }
+    }
+
+    public void insertPost(PostEntity post) {
+        Map<String, ? extends Serializable> values = Map.of(
+                "id", String.valueOf(post.getId()),
+                "postText", post.getText(),
+                "userId", String.valueOf(post.getId())
+        );
+        jdbcTemplate.update(INSERT_POST, values);
     }
 
     @SneakyThrows
