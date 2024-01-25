@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
+@Deprecated
 public interface PostRepository extends CrudRepository<PostEntity, UUID> {
 
     @Query(value = "SELECT *  FROM post LIMIT :limit OFFSET :offset", nativeQuery = true)

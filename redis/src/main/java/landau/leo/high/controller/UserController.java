@@ -45,7 +45,7 @@ public class UserController {
     })
     public ResponseEntity<String> login(
             @Parameter(name = "User credentials", required = true)
-            @RequestBody LoginUserRequest loginUserRequest) {
+            @RequestBody LoginUserRequest loginUserRequest) throws Exception {
 
         String accessToken = userService.authenticateUser(loginUserRequest);
         return ResponseEntity.ok(accessToken);
@@ -61,7 +61,7 @@ public class UserController {
     })
     public ResponseEntity<String> register(
             @Parameter(name = "New user details", required = true)
-            @RequestBody RegisterUserRequest registerUserRequest) {
+            @RequestBody RegisterUserRequest registerUserRequest) throws Exception {
 
         String userId = userService.registerUser(registerUserRequest);
         return ResponseEntity.ok(userId);
@@ -78,7 +78,7 @@ public class UserController {
     })
     public ResponseEntity<GetUserResponse> getUserProfile(
             @Parameter(name = "User ID", required = true)
-            @PathVariable UUID id) {
+            @PathVariable UUID id) throws Exception {
 
         GetUserResponse user = userService.getUserById(id);
         return ResponseEntity.ok(user);
@@ -102,7 +102,7 @@ public class UserController {
 
     @PostMapping("/user/load")
     @Operation(summary = "Load default users")
-    public void loadUsers() {
+    public void loadUsers() throws Exception {
         userService.loadDefaultUsers();
     }
 
@@ -122,7 +122,7 @@ public class UserController {
     })
     public ResponseEntity<List<PostResponse>> getFriendsPosts(
             @Parameter(name = "offset", example = "0") @RequestParam @Min(0) @Max(100) int offset,
-            @Parameter(name = "limit", example = "10") @Min(1) @RequestParam long limit) {
+            @Parameter(name = "limit", example = "10") @Min(1) @RequestParam long limit) throws Exception {
         return ResponseEntity.ok(userService.getUsersPosts(offset, limit));
     }
 
@@ -161,7 +161,7 @@ public class UserController {
     public void sendUserMessage(
             @Parameter(name = "User ID", required = true)
             @PathVariable("user_id") UUID userId,
-            @RequestBody DialogMessageRequest messageRequest) {
+            @RequestBody DialogMessageRequest messageRequest) throws Exception {
 
         userService.send(userId, messageRequest.getTo(), messageRequest.getText());
     }

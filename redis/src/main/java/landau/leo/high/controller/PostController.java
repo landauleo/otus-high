@@ -32,7 +32,7 @@ public class PostController {
     })
     public ResponseEntity<UUID> create(
             @Parameter(required = true)
-            @RequestBody PostRequest postRequest) {
+            @RequestBody PostRequest postRequest) throws Exception {
 
         UUID postId = postService.createPost(postRequest);
         return ResponseEntity.ok(postId);

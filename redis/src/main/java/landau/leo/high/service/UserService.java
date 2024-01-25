@@ -13,9 +13,9 @@ import java.util.Scanner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import landau.leo.high.dao.DialogMessageRepository;
-import landau.leo.high.dao.PostRepository;
-import landau.leo.high.dao.UserRepository;
+import landau.leo.high.dao.LuaDialogMessageRepository;
+import landau.leo.high.dao.LuaPostRepository;
+import landau.leo.high.dao.LuaUserRepository;
 import landau.leo.high.dto.DialogMessage;
 import landau.leo.high.dto.GetUserResponse;
 import landau.leo.high.dto.GetUserShortInfoResponse;
@@ -38,11 +38,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final DialogMessageRepository dialogMessageRepository;
-    private final PostRepository postRepository;
+    private final LuaUserRepository userRepository;
+    private final LuaDialogMessageRepository dialogMessageRepository;
+    private final LuaPostRepository postRepository;
 
-    public String authenticateUser(LoginUserRequest dto) {
+    public String authenticateUser(LoginUserRequest dto) throws Exception {
 
         String hashedPasswordFromDb = userRepository.findById(UUID.fromString(dto.getId())).get().getPassword();
 
@@ -53,7 +53,7 @@ public class UserService {
         return UUID.randomUUID().toString();
     }
 
-    public String registerUser(RegisterUserRequest dto) {
+    public String registerUser(RegisterUserRequest dto) throws Exception {
         UUID uuid = UUID.randomUUID();
 
         UserEntity user = UserEntity.builder().id(uuid).firstName(dto.getFirstName()).secondName(dto.getSecondName()).birthdate(dto.getBirthdate()).biography(dto.getBiography()).city(dto.getCity()).password(BCrypt.hashpw(dto.getPassword(), BCrypt.gensalt())).build();
@@ -62,7 +62,7 @@ public class UserService {
         return uuid.toString();
     }
 
-    public GetUserResponse getUserById(UUID userId) {
+    public GetUserResponse getUserById(UUID userId) throws Exception {
         return GetUserResponse.toDto(Objects.requireNonNull(userRepository.findById(userId).orElse(null)));
     }
 
@@ -74,7 +74,7 @@ public class UserService {
         return Math.toIntExact(userRepository.count());
     }
 
-    public void loadDefaultUsers() {
+    public void loadDefaultUsers() throws Exception {
         new File("people.csv");
         InputStream is = getClass().getClassLoader().getResourceAsStream("people.csv");
         BufferedInputStream bis = new BufferedInputStream(is, 1024 * 1024);
@@ -146,7 +146,7 @@ public class UserService {
     }
 
     @Cacheable("usersPosts")
-    public List<PostResponse> getUsersPosts(int offset, long limit) {
+    public List<PostResponse> getUsersPosts(int offset, long limit) throws Exception {
         return postRepository.findAllWithOffSetAndLimit(offset, limit).stream().map(PostResponse::toDto).collect(Collectors.toList());
     }
 
@@ -154,7 +154,7 @@ public class UserService {
         return dialogMessageRepository.findAllByFrom(UUID.fromString(userId)).stream().map(DialogMessage::toDto).collect(Collectors.toList());
     }
 
-    public void send(UUID fromUserId, UUID toUserId, String text) {
+    public void send(UUID fromUserId, UUID toUserId, String text) throws Exception {
         dialogMessageRepository.save(new DialogMessageEntity(fromUserId, toUserId, text));
     }
 

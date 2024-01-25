@@ -13,19 +13,20 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 class UserDaoWithoutTestContainerTest {
 
     @Autowired
-    private UserRepository userRepository;
+    private LuaUserRepository userRepository;
 
     private static final String FIRST_NAME = "Максим";
     private static final String SECOND_NAME = "Носов";
 
     @Test
     @DisplayName("Test insert and get user")
-    void insertTest() {
+    void insertTest() throws Exception {
         UUID userId = UUID.randomUUID();
         UserEntity userEntity = UserEntity
                 .builder()
@@ -48,6 +49,35 @@ class UserDaoWithoutTestContainerTest {
     @DisplayName("Test insert and get user")
     void getByFirstAndSecondNameNonExistingUserTest() {
         assertDoesNotThrow(() -> userRepository.findAllByFirstNameAndSecondName(FIRST_NAME, SECOND_NAME));
+    }
+
+    @Test
+    @DisplayName("Test count all users")
+    void countAllUsersTest() throws Exception {
+        UUID userId = UUID.randomUUID();
+        UserEntity userEntity = UserEntity
+                .builder()
+                .id(userId)
+                .firstName("firstName")
+                .secondName("secondName")
+                .biography("I'm a robot")
+                .birthdate(LocalDate.of(1997, 4, 11))
+                .city("Beijing")
+                .gender(Gender.FEMALE)
+                .password("ararar123")
+                .build();
+
+        userRepository.save(userEntity);
+
+        assertTrue(userRepository.count() > 0);
+    }
+
+    @Test
+    @DisplayName("Test delete all users")
+    void deleteAllUsersTest() {
+        assertDoesNotThrow(() -> userRepository.deleteAll());
+
+        assertEquals(0, userRepository.count());
     }
 
 }

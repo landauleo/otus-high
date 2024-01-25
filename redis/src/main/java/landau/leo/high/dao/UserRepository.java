@@ -7,6 +7,7 @@ import java.util.UUID;
 import landau.leo.high.entity.UserEntity;
 import org.springframework.data.repository.CrudRepository;
 
+@Deprecated
 public interface UserRepository extends CrudRepository<UserEntity, UUID> {
 
     @Override
