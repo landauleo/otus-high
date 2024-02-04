@@ -1,0 +1,5 @@
+###
+POST http://localhost:8080/post/load
+
+###
+GET http://localhost:8080/post/feed?offset=2&limit=3
