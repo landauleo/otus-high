@@ -19,7 +19,7 @@ public class DialogueGrpcClient {
     private final DialogueServiceGrpc.DialogueServiceBlockingStub dialogueServiceStub;
 
     public DialogueGrpcClient() {
-        this.channel = ManagedChannelBuilder.forAddress("localhost", 8090)
+        this.channel = ManagedChannelBuilder.forAddress("127.0.0.1", 9090)
                 .usePlaintext()
                 .build();
         this.dialogueServiceStub = DialogueServiceGrpc.newBlockingStub(channel);

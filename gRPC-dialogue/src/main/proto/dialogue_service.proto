@@ -2,6 +2,8 @@ syntax = "proto3";
 
 import "google/protobuf/empty.proto";
 
+option java_multiple_files = true;
+
 package landau.leo.high.generated;
 
 // Определение сообщения для запроса списка диалогов

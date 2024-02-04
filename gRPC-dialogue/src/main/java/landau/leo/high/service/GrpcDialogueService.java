@@ -8,23 +8,26 @@ import com.google.protobuf.Empty;
 import io.grpc.stub.StreamObserver;
 import landau.leo.high.dao.DialogMessageDao;
 import landau.leo.high.entity.DialogMessageEntity;
+import landau.leo.high.generated.DialogMessage;
 import landau.leo.high.generated.DialogueServiceGrpc;
-import landau.leo.high.generated.DialogueServiceOuterClass;
+import landau.leo.high.generated.GetUsersDialogsRequest;
+import landau.leo.high.generated.GetUsersDialogsResponse;
+import landau.leo.high.generated.SendUserMessageRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import net.devh.boot.grpc.server.service.GrpcService;
 
-@Service
+@GrpcService
 @RequiredArgsConstructor
 public class GrpcDialogueService extends DialogueServiceGrpc.DialogueServiceImplBase {
 
     private final DialogMessageDao dialogMessageDao;
 
     @Override
-    public void getUsersDialogs(DialogueServiceOuterClass.GetUsersDialogsRequest request, StreamObserver<DialogueServiceOuterClass.GetUsersDialogsResponse> responseObserver) {
+    public void getUsersDialogs(GetUsersDialogsRequest request, StreamObserver<GetUsersDialogsResponse> responseObserver) {
         List<DialogMessageEntity> list = dialogMessageDao.getMessages(request.getUserId());
-        DialogueServiceOuterClass.GetUsersDialogsResponse response = DialogueServiceOuterClass.GetUsersDialogsResponse.newBuilder()
+        GetUsersDialogsResponse response = GetUsersDialogsResponse.newBuilder()
                 .addAllMessages(list.stream()
-                        .map(d -> DialogueServiceOuterClass.DialogMessage.newBuilder()
+                        .map(d -> DialogMessage.newBuilder()
                                 .setFromUserId(d.getFrom().toString())
                                 .setToUserId(d.getTo().toString())
                                 .setText(d.getText())
@@ -36,7 +39,7 @@ public class GrpcDialogueService extends DialogueServiceGrpc.DialogueServiceImpl
     }
 
     @Override
-    public void sendUserMessage(DialogueServiceOuterClass.SendUserMessageRequest request, StreamObserver<Empty> responseObserver) {
+    public void sendUserMessage(SendUserMessageRequest request, StreamObserver<Empty> responseObserver) {
         dialogMessageDao.insert(new DialogMessageEntity(UUID.fromString(request.getFromUserId()), UUID.fromString(request.getToUserId()), request.getText()));
         responseObserver.onNext(Empty.getDefaultInstance());
         responseObserver.onCompleted();
