@@ -77,7 +77,7 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Service unavailable")
     })
     public ResponseEntity<GetUserResponse> getUserProfile(
-            @Parameter(name = "User ID", required = true)
+            @Parameter(name = "id", example = "1fcb454f-2e39-4a23-9a0f-27fcaff0ee66", required = true)
             @PathVariable String id) {
 
         GetUserResponse user = userService.getUserById(id);
@@ -132,7 +132,7 @@ public class UserController {
         userService.loadDefaultPosts();
     }
 
-    @GetMapping("/dialog/{user_id}/list")
+    @GetMapping("/dialog/{userId}/list")
     @Operation(summary = "Get user dialogs", description = "Get user dialogs by user ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved user dialogs"),
@@ -142,14 +142,14 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Service unavailable")
     })
     public ResponseEntity<List<DialogMessage>> getUsersDialogs(
-            @Parameter(name = "User ID", required = true)
-            @PathVariable("user_id") String userId) {
+            @Parameter(name = "userId", example = "1fcb454f-2e39-4a23-9a0f-27fcaff0ee66", required = true)
+            @PathVariable("userId") String userId) {
 
         List<DialogMessage> list = userService.getUsersDialogs(userId);
         return ResponseEntity.ok(list);
     }
 
-    @PostMapping("/dialog/{user_id}/send")
+    @PostMapping("/dialog/{userId}/send")
     @Operation(summary = "Send user message", description = "Send user message")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved user dialogs"),
@@ -159,9 +159,9 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Service unavailable")
     })
     public void sendUserMessage(
-            @Parameter(name = "User ID", required = true)
-            @PathVariable("user_id") UUID userId,
-            @RequestBody DialogMessageRequest messageRequest) {
+            @Parameter(name = "userId", example = "1fcb454f-2e39-4a23-9a0f-27fcaff0ee66", required = true)
+            @PathVariable("userId") UUID userId,
+            @RequestBody DialogMessageRequest messageRequest) throws Exception {
 
         userService.send(userId, messageRequest.getTo(), messageRequest.getText());
     }

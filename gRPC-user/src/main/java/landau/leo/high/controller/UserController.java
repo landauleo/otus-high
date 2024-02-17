@@ -77,7 +77,7 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Service unavailable")
     })
     public ResponseEntity<GetUserResponse> getUserProfile(
-            @Parameter(name = "User ID", required = true)
+            @Parameter(name = "id", example = "1fcb454f-2e39-4a23-9a0f-27fcaff0ee66", required = true)
             @PathVariable String id) {
 
         GetUserResponse user = userService.getUserById(id);
@@ -132,7 +132,7 @@ public class UserController {
         userService.loadDefaultPosts();
     }
 
-    @GetMapping("/dialog/{user_id}/list")
+    @GetMapping("/dialog/{userId}/list")
     @Operation(summary = "Get user dialogs", description = "Get user dialogs by user ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved user dialogs"),
@@ -142,8 +142,8 @@ public class UserController {
             @ApiResponse(responseCode = "503", description = "Service unavailable")
     })
     public ResponseEntity<List<DialogMessageResponse>> getUsersDialogs(
-            @Parameter(name = "User ID", required = true)
-            @PathVariable("user_id") String userId) {
+            @Parameter(name = "userId", example = "1fcb454f-2e39-4a23-9a0f-27fcaff0ee66", required = true)
+            @PathVariable String userId) {
 
         List<DialogMessageResponse> list = userService.getUsersDialogs(userId);
         return ResponseEntity.ok(list);

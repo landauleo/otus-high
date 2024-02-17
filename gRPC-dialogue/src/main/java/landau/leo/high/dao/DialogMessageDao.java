@@ -29,7 +29,7 @@ public class DialogMessageDao {
             List<Map<String, Object>> list = jdbcTemplate.queryForList(GET_MESSAGES, Map.of("userId", userId));
             list.forEach(m -> {
                 DialogMessageEntity post = new DialogMessageEntity(UUID.fromString((String) m.get("from_user_id")),
-                        UUID.fromString((String) m.get("from_user_id")), (String) m.get("text_message"));
+                        UUID.fromString((String) m.get("to_user_id")), (String) m.get("text_message"));
                 messages.add(post);
             });
             return messages;
