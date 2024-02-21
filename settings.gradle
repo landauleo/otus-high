@@ -2,4 +2,6 @@ rootProject.name = 'otus-high'
 include 'mysql'
 include 'postgres'
 include 'redis'
+include 'gRPC-user'
+include 'gRPC-dialogue'
 

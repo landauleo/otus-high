@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option java_multiple_files = true;
+
+package landau.leo.high.generated;
+
+// Определение сообщения для запроса списка диалогов
+message GetUsersDialogsRequest {
+  string user_id = 1;
+}
+
+// Определение сообщения для диалога
+message DialogMessage {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  string text = 3;
+}
+
+// Определение сообщения для списка диалогов
+message GetUsersDialogsResponse {
+  repeated DialogMessage messages = 1;
+}
+
+// Определение сообщения для отправки сообщения
+message SendUserMessageRequest {
+  string from_user_id = 1;
+  string to_user_id = 2;
+  string text = 3;
+}
+
+// Определение gRPC сервиса
+service DialogueService {
+  rpc GetUsersDialogs (GetUsersDialogsRequest) returns (GetUsersDialogsResponse);
+  rpc SendUserMessage (SendUserMessageRequest) returns (google.protobuf.Empty);
+}
