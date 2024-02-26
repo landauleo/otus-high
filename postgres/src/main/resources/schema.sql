@@ -25,3 +25,10 @@ CREATE TABLE IF NOT EXISTS app.dialog_message
     -- Добавляем поле для хранения хэша, используемого для шардирования
     shard_id     int
 );
+
+CREATE TABLE IF NOT EXISTS app.post_audit
+(
+    id           char(36)                    NOT NULL PRIMARY KEY,
+    user_id      char(36)                    NOT NULL,
+    created_date timestamp(6) WITH TIME ZONE NOT NULL
+);
