@@ -20,6 +20,7 @@ import landau.leo.high.entity.PostEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,15 @@ public class PostDao {
     private static final String GET_FRIENDS_POSTS = "SELECT id, post_text, user_id FROM post LIMIT :limit OFFSET :offset";
 
     private static final String INSERT_POST = "INSERT INTO post (id, post_text, user_id) VALUES (:id, :postText, :userId)";
+
+    private static final String DELETE_POST_BY_ID = "DELETE FROM post WHERE id = :id";
+
+    public void deletePost(UUID id) {
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        parameters.addValue("id", id);
+
+        jdbcTemplate.update(DELETE_POST_BY_ID, parameters);
+    }
 
     public List<PostEntity> getFriendsPosts(int offset, long limit) {
         try {
