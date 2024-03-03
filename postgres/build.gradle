@@ -32,6 +32,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'io.micrometer:micrometer-registry-prometheus:1.10.6'
 }
 
 tasks.named('test') {
